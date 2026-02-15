@@ -3,116 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G-Styler Ultra - 300+ Styles</title>
+    <title>Stylish Name Generator Pro</title>
     <style>
-        :root { --primary: #8a2be2; --bg: #050505; --card: #121212; --accent: #00ffcc; }
-        body { font-family: 'Courier New', Courier, monospace; background: var(--bg); color: #fff; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        :root { --primary: #8e2de2; --secondary: #4a00e0; --bg: #0a0a0c; --card: #16161a; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
         .container { width: 100%; max-width: 500px; }
 
-        /* Symbols Horizontal Scroll */
-        .symbol-box { width: 100%; background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #333; }
-        .symbol-box h4 { margin: 0 0 10px; font-size: 13px; color: var(--accent); text-transform: uppercase; }
-        .scroll-wrapper { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; scrollbar-width: thin; }
-        .scroll-wrapper::-webkit-scrollbar { height: 4px; }
-        .scroll-wrapper::-webkit-scrollbar-thumb { background: var(--primary); }
-        .sym { min-width: 45px; height: 45px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 20px; cursor: pointer; border: 1px solid #222; }
-        .sym:active { background: var(--primary); }
+        /* Symbols Section - Swipe Left */
+        .symbol-section { width: 100%; background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 20px; box-sizing: border-box; border: 1px solid #222; }
+        .symbol-section p { margin: 0 0 10px; font-size: 12px; color: #777; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .symbols-wrapper { 
+            display: flex; 
+            overflow-x: auto; 
+            gap: 10px; 
+            padding-bottom: 10px;
+            scrollbar-width: none;
+        }
+        .symbols-wrapper::-webkit-scrollbar { display: none; }
+        
+        .sym-item { 
+            min-width: 45px; height: 45px; background: #222; display: flex; 
+            align-items: center; justify-content: center; border-radius: 10px; 
+            font-size: 22px; cursor: pointer; border: 1px solid #333; transition: 0.2s;
+        }
+        .sym-item:active { background: var(--primary); transform: scale(0.9); }
 
-        /* Input & Button */
-        .controls { width: 100%; text-align: center; margin-bottom: 20px; }
-        input { width: 100%; padding: 15px; border-radius: 8px; border: 1px solid var(--primary); background: #000; color: #fff; font-size: 18px; box-sizing: border-box; margin-bottom: 10px; outline: none; }
-        button { width: 100%; padding: 15px; border-radius: 8px; background: var(--primary); color: #fff; border: none; font-weight: bold; font-size: 16px; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 15px rgba(138, 43, 226, 0.5); }
+        /* Input & Generate Button */
+        .input-box { width: 100%; margin-bottom: 20px; }
+        input { 
+            width: 100%; padding: 16px; border-radius: 12px; border: 2px solid #333; 
+            background: #000; color: #fff; font-size: 18px; box-sizing: border-box; 
+            margin-bottom: 12px; outline: none; text-align: center;
+        }
+        input:focus { border-color: var(--primary); }
+        
+        button { 
+            width: 100%; padding: 16px; border-radius: 12px; 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            color: white; border: none; font-size: 18px; font-weight: bold; 
+            cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(142, 45, 226, 0.3);
+        }
+        button:active { transform: scale(0.98); }
 
-        /* Result List */
-        .results { width: 100%; display: flex; flex-direction: column; gap: 10px; }
-        .name-row { background: var(--card); padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--primary); }
-        .name-text { font-size: 17px; overflow: hidden; text-overflow: ellipsis; }
-        .copy-btn { background: #333; color: var(--accent); border: 1px solid var(--accent); padding: 5px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+        /* Results List */
+        .results-container { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+        .name-card { 
+            background: var(--card); padding: 15px; border-radius: 12px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            border: 1px solid #222; animation: fadeIn 0.4s ease;
+        }
+        .name-text { font-size: 18px; font-weight: 500; color: #eee; }
+        .copy-btn { background: #222; color: #00ffcc; border: 1px solid #00ffcc; padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="symbol-box">
-        <h4>Special Symbols (Scroll Left)</h4>
-        <div class="scroll-wrapper" id="symCloud"></div>
+    <div class="symbol-section">
+        <p>Click to Copy Symbol (Swipe Left)</p>
+        <div class="symbols-wrapper" id="symList"></div>
     </div>
 
-    <div class="controls">
-        <input type="text" id="targetName" placeholder="Enter Name...">
-        <button onclick="generateHugeList()">GENERATE 300+ STYLES</button>
+    <div class="input-box">
+        <input type="text" id="nameInput" placeholder="Enter Name Here...">
+        <button onclick="generateStyles()">Generate</button>
     </div>
 
-    <div class="results" id="output"></div>
+    <div class="results-container" id="results"></div>
 </div>
 
 <script>
-    // ২০০+ বিশুদ্ধ গেমিং ও টেক্সট সিম্বল (ইমোজি নয়)
-    const proSymbols = [
-        "", "亗", "〆", "ツ", "彡", "×", "『", "』", "「", "」", "【", "】", "〖", "〗", "⚔", "⚒", "⚓", "⚡", "⚖", "⚗", "⛓", "☠", "☢", "☣", "☪", "☯", "☸", "☮", "☦", "☥", "⚧", "☧", "☨", "☩", "☫", "☬", "☭", "♕", "♔", "♗", "♘", "♙", "♟", "♖", "♜", "♝", "♞", "☁", "❆", "❅", "❂", "❁", "⚜", "🔱", "⛩", "♨", "🌀", "💠", "Ø", "Z", "X", "V", "B", "N", "M", "L", "K", "J", "H", "G", "F", "D", "S", "A", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "†", "‡", "‰", "‱", "′", "″", "‴", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹", "⁺", "⁻", "⁼", "⁽", "⁾", "ⁿ", "₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉", "₊", "₋", "₌", "₍", "₎", "ₐ", "ₑ", "ₒ", "ₓ", "ₔ", "ℎ", "ℏ", "ℓ", "℘", "ℜ", "ℑ", "℞", "℟", "℠", "℡", "™", "℣", "ℤ", "℥", "Ω", "℧", "ℨ", "℩", "K", "Å", "ℬ", "ℭ", "℮", "ℯ", "ℰ", "ℱ", "Ⅎ", "ℳ", "ℴ", "ℵ", "ℶ", "ℷ", "ℸ", "ℹ", "ℼ", "ℽ", "ℾ", "ℿ", "⅀", "⅁", "⅂", "⅃", "⅄", "ⅅ", "ⅆ", "ⅇ", "ⅈ", "ⅉ", "⅊", "⅋", "⅌", "⅍", "ⅎ", "⅏", "␀", "␁", "␂", "␃", "␄", "␅", "␆", "␇", "␈", "␉", "␊", "␋", "␌", "␍", "␎", "␏", "␐", "␑", "␒", "␓", "␔", "␕", "␖", "␗", "␘", "␙", "␚", "␛", "␜", "␝", "␞", "␟", "␠", "␡", "␢", "␤", "␥", "␦"
+    // ২০০+ পিওর সিম্বল (ইমোজি ও ফন্ট বাদে)
+    const pureSymbols = [
+        "", "亗", "〆", "ツ", "彡", "×", "『", "』", "「", "」", "【", "】", "⚔", "⚒", "⚓", "⚡", "⚖", "⛓", "☠", "☢", "☣", "☪", "☯", "☸", "☮", "☦", "☥", "⚧", "☧", "☨", "☩", "☫", "☬", "☭", "♕", "♔", "♗", "♘", "♙", "♟", "♖", "♜", "♝", "♞", "☁", "❆", "❂", "⚜", "🔱", "⛩", "♨", "🌀", "Ø", "†", "‡", "℠", "℡", "™", "ℤ", "ℵ", "ℶ", "ℷ", "ℸ", "⅀", "⅁", "⅂", "⅃", "⅄", "ⅅ", "ⅆ", "ⅇ", "ⅈ", "ⅉ", "⅊", "⅋", "⅌", "⅍", "ⅎ", "⅏", "♰", "♱", "♲", "♳", "♴", "♵", "♶", "♷", "♸", "♹", "♺", "♻", "♼", "♽", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅", "⚆", "⚇", "⚈", "⚉", "⚊", "⚋", "⚌", "⚍", "⚎", "⚏", "⚐", "⚑", "⚕", "⚘", "⚙", "⚚", "⚛", "⚝", "⚞", "⚟", "⚠", "⚢", "⚣", "⚤", "⚥", "⚦", "⚨", "⚩", "⚪", "⚫", "⚬", "⚭", "⚮", "⚯", "⚰", "⚱", "⚲", "⚳", "⚴", "⚵", "⚶", "⚷", "⚸", "⚹", "⚺", "⚻", "⚼", "⚽", "⚾", "⚿", "⛀", "⛁", "⛂", "⛃", "⛄", "⛅", "⛈", "⛎", "⛏", "⛑", "⛓", "⛔", "⛩", "⛪", "⛰", "⛱", "⛲", "⛳", "⛴", "⛵", "⛷", "⛸", "⛹", "⛺", "⛽", "✁", "✂", "✃", "✄", "✆", "✇", "✈", "✉", "✌", "✍", "✎", "✏", "✐", "✑", "✒", "✓", "✔", "✕", "✖", "✗", "✘", "✙", "✚", "✛", "✜", "✝", "✞", "✟", "✠", "✡", "✢", "✣", "✤", "✥", "✦", "✧", "✩", "✪", "✫", "✬", "✭", "✮", "✯", "✰", "✱", "✲", "✳", "✴", "✵", "✶", "✷", "✸", "✹", "✺", "✻", "✼", "✽", "✾", "✿", "❀", "❁", "❂", "❃", "❄", "❅", "❆", "❇", "❈", "❉", "❊", "❋", "❍", "❏", "❐", "❑", "❒", "❖", "❘", "❙", "❚", "❛", "❜", "❝", "❞", "❡", "❢", "❣", "❤", "❥", "❦", "❧", "❨", "❩", "❪", "❫", "❬", "❭", "❮", "❯", "❰", "❱", "❲", "❳", "❴", "❵"
     ];
 
-    const symCloud = document.getElementById('symCloud');
-    proSymbols.forEach(s => {
+    // সিম্বল লোড এবং কপি লজিক
+    const symList = document.getElementById('symList');
+    pureSymbols.forEach(s => {
         let d = document.createElement('div');
-        d.className = 'sym';
+        d.className = 'sym-item';
         d.innerText = s;
-        d.onclick = () => { navigator.clipboard.writeText(s); alert('Copied!'); };
-        symCloud.appendChild(d);
+        d.onclick = () => {
+            navigator.clipboard.writeText(s);
+            alert("Symbol Copied!");
+        };
+        symList.appendChild(d);
     });
 
-    const fontMaps = [
-        { name: "Bold", map: "𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳" },
-        { name: "Cursive", map: "𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃" },
-        { name: "Bubble", map: "ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ" },
-        { name: "Mono", map: "𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫" },
-        { name: "Square", map: "🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉" }
+    // ফন্ট ম্যাপ (Uppercase ও Lowercase সহ)
+    const fontStyles = [
+        { u: "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙", l: "𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳" },
+        { u: "𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵", l: "𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏" },
+        { u: "𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ", l: "𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫" },
+        { u: "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ", l: "ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ" },
+        { u: "Alpha", l: "Alpha" } // Default
     ];
 
-    function generateHugeList() {
-        const name = document.getElementById('targetName').value;
-        const output = document.getElementById('output');
-        if (!name) return alert("Enter a name first!");
-        output.innerHTML = "";
+    function applyFont(text, style) {
+        const U = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const L = "abcdefghijklmnopqrstuvwxyz";
+        if(style.u === "Alpha") return text;
+        return text.split('').map(c => {
+            if(U.includes(c)) return Array.from(style.u)[U.indexOf(c)];
+            if(L.includes(c)) return Array.from(style.l)[L.indexOf(c)];
+            return c;
+        }).join('');
+    }
 
-        let count = 0;
-        const alpha = "abcdefghijklmnopqrstuvwxyz";
+    function generateStyles() {
+        const input = document.getElementById('nameInput').value;
+        const results = document.getElementById('results');
+        if(!input) return alert("Please enter a name");
+        results.innerHTML = "";
+
         const decors = [
             {p: "亗", s: "亗"}, {p: "꧁༺", s: "༻꧂"}, {p: "", s: ""}, {p: "〆", s: ""},
             {p: "『", s: "』"}, {p: "×", s: "×"}, {p: "V I P", s: "ϟ"}, {p: "☯", s: "☯"},
             {p: "⚔", s: "⚔"}, {p: "☣", s: "☣"}, {p: "♔", s: "♔"}, {p: "☆", s: "☆"}
         ];
 
-        fontMaps.forEach(f => {
-            let styled = name.toLowerCase().split('').map(c => {
-                let i = alpha.indexOf(c);
-                return i > -1 ? Array.from(f.map)[i] : c;
-            }).join('');
-
-            // ৩০০+ রেজাল্ট নিশ্চিত করতে লুপ
-            for(let i=0; i < 60; i++) {
-                let d = decors[i % decors.length];
-                let sLeft = proSymbols[Math.floor(Math.random()*proSymbols.length)];
-                let sRight = proSymbols[Math.floor(Math.random()*proSymbols.length)];
-                
-                let finalName = `${sLeft} ${d.p} ${styled} ${d.s} ${sRight}`;
-                addName(finalName);
-                count++;
-            }
-        });
+        // ৩০০+ ইউনিক ডিজাইন জেনারেট করার লজিক
+        for (let i = 0; i < 310; i++) {
+            let style = fontStyles[i % fontStyles.length];
+            let styledName = applyFont(input, style);
+            let d = decors[i % decors.length];
+            
+            // র্যান্ডম সিম্বল আগে-পরে
+            let sLeft = pureSymbols[Math.floor(Math.random() * pureSymbols.length)];
+            let sRight = pureSymbols[Math.floor(Math.random() * pureSymbols.length)];
+            
+            let finalName = `${sLeft} ${d.p} ${styledName} ${d.s} ${sRight}`;
+            
+            let card = document.createElement('div');
+            card.className = 'name-card';
+            card.innerHTML = `<span class="name-text">${finalName}</span> <button class="copy-btn" onclick="copyText('${finalName}')">COPY</button>`;
+            results.appendChild(card);
+        }
     }
 
-    function addName(txt) {
-        let div = document.createElement('div');
-        div.className = 'name-row';
-        div.innerHTML = `<span class="name-text">${txt}</span> <button class="copy-btn" onclick="copyIt('${txt}')">COPY</button>`;
-        document.getElementById('output').appendChild(div);
-    }
-
-    function copyIt(t) {
-        navigator.clipboard.writeText(t);
-        alert("Copied!");
+    function copyText(txt) {
+        navigator.clipboard.writeText(txt);
+        alert("Name Copied!");
     }
 </script>
 
