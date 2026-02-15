@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Styler Ultra - 300+ Styles</title>
+    <style>
+        :root { --primary: #8a2be2; --bg: #050505; --card: #121212; --accent: #00ffcc; }
+        body { font-family: 'Courier New', Courier, monospace; background: var(--bg); color: #fff; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        
+        .container { width: 100%; max-width: 500px; }
+
+        /* Symbols Horizontal Scroll */
+        .symbol-box { width: 100%; background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #333; }
+        .symbol-box h4 { margin: 0 0 10px; font-size: 13px; color: var(--accent); text-transform: uppercase; }
+        .scroll-wrapper { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; scrollbar-width: thin; }
+        .scroll-wrapper::-webkit-scrollbar { height: 4px; }
+        .scroll-wrapper::-webkit-scrollbar-thumb { background: var(--primary); }
+        .sym { min-width: 45px; height: 45px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 20px; cursor: pointer; border: 1px solid #222; }
+        .sym:active { background: var(--primary); }
+
+        /* Input & Button */
+        .controls { width: 100%; text-align: center; margin-bottom: 20px; }
+        input { width: 100%; padding: 15px; border-radius: 8px; border: 1px solid var(--primary); background: #000; color: #fff; font-size: 18px; box-sizing: border-box; margin-bottom: 10px; outline: none; }
+        button { width: 100%; padding: 15px; border-radius: 8px; background: var(--primary); color: #fff; border: none; font-weight: bold; font-size: 16px; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 15px rgba(138, 43, 226, 0.5); }
+
+        /* Result List */
+        .results { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+        .name-row { background: var(--card); padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--primary); }
+        .name-text { font-size: 17px; overflow: hidden; text-overflow: ellipsis; }
+        .copy-btn { background: #333; color: var(--accent); border: 1px solid var(--accent); padding: 5px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="symbol-box">
+        <h4>Special Symbols (Scroll Left)</h4>
+        <div class="scroll-wrapper" id="symCloud"></div>
+    </div>
+
+    <div class="controls">
+        <input type="text" id="targetName" placeholder="Enter Name...">
+        <button onclick="generateHugeList()">GENERATE 300+ STYLES</button>
+    </div>
+
+    <div class="results" id="output"></div>
+</div>
+
+<script>
+    // ২০০+ বিশুদ্ধ গেমিং ও টেক্সট সিম্বল (ইমোজি নয়)
+    const proSymbols = [
+        "", "亗", "〆", "ツ", "彡", "×", "『", "』", "「", "」", "【", "】", "〖", "〗", "⚔", "⚒", "⚓", "⚡", "⚖", "⚗", "⛓", "☠", "☢", "☣", "☪", "☯", "☸", "☮", "☦", "☥", "⚧", "☧", "☨", "☩", "☫", "☬", "☭", "♕", "♔", "♗", "♘", "♙", "♟", "♖", "♜", "♝", "♞", "☁", "❆", "❅", "❂", "❁", "⚜", "🔱", "⛩", "♨", "🌀", "💠", "Ø", "Z", "X", "V", "B", "N", "M", "L", "K", "J", "H", "G", "F", "D", "S", "A", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "†", "‡", "‰", "‱", "′", "″", "‴", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹", "⁺", "⁻", "⁼", "⁽", "⁾", "ⁿ", "₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉", "₊", "₋", "₌", "₍", "₎", "ₐ", "ₑ", "ₒ", "ₓ", "ₔ", "ℎ", "ℏ", "ℓ", "℘", "ℜ", "ℑ", "℞", "℟", "℠", "℡", "™", "℣", "ℤ", "℥", "Ω", "℧", "ℨ", "℩", "K", "Å", "ℬ", "ℭ", "℮", "ℯ", "ℰ", "ℱ", "Ⅎ", "ℳ", "ℴ", "ℵ", "ℶ", "ℷ", "ℸ", "ℹ", "ℼ", "ℽ", "ℾ", "ℿ", "⅀", "⅁", "⅂", "⅃", "⅄", "ⅅ", "ⅆ", "ⅇ", "ⅈ", "ⅉ", "⅊", "⅋", "⅌", "⅍", "ⅎ", "⅏", "␀", "␁", "␂", "␃", "␄", "␅", "␆", "␇", "␈", "␉", "␊", "␋", "␌", "␍", "␎", "␏", "␐", "␑", "␒", "␓", "␔", "␕", "␖", "␗", "␘", "␙", "␚", "␛", "␜", "␝", "␞", "␟", "␠", "␡", "␢", "␤", "␥", "␦"
+    ];
+
+    const symCloud = document.getElementById('symCloud');
+    proSymbols.forEach(s => {
+        let d = document.createElement('div');
+        d.className = 'sym';
+        d.innerText = s;
+        d.onclick = () => { navigator.clipboard.writeText(s); alert('Copied!'); };
+        symCloud.appendChild(d);
+    });
+
+    const fontMaps = [
+        { name: "Bold", map: "𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳" },
+        { name: "Cursive", map: "𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃" },
+        { name: "Bubble", map: "ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ" },
+        { name: "Mono", map: "𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫" },
+        { name: "Square", map: "🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉" }
+    ];
+
+    function generateHugeList() {
+        const name = document.getElementById('targetName').value;
+        const output = document.getElementById('output');
+        if (!name) return alert("Enter a name first!");
+        output.innerHTML = "";
+
+        let count = 0;
+        const alpha = "abcdefghijklmnopqrstuvwxyz";
+        const decors = [
+            {p: "亗", s: "亗"}, {p: "꧁༺", s: "༻꧂"}, {p: "", s: ""}, {p: "〆", s: ""},
+            {p: "『", s: "』"}, {p: "×", s: "×"}, {p: "V I P", s: "ϟ"}, {p: "☯", s: "☯"},
+            {p: "⚔", s: "⚔"}, {p: "☣", s: "☣"}, {p: "♔", s: "♔"}, {p: "☆", s: "☆"}
+        ];
+
+        fontMaps.forEach(f => {
+            let styled = name.toLowerCase().split('').map(c => {
+                let i = alpha.indexOf(c);
+                return i > -1 ? Array.from(f.map)[i] : c;
+            }).join('');
+
+            // ৩০০+ রেজাল্ট নিশ্চিত করতে লুপ
+            for(let i=0; i < 60; i++) {
+                let d = decors[i % decors.length];
+                let sLeft = proSymbols[Math.floor(Math.random()*proSymbols.length)];
+                let sRight = proSymbols[Math.floor(Math.random()*proSymbols.length)];
+                
+                let finalName = `${sLeft} ${d.p} ${styled} ${d.s} ${sRight}`;
+                addName(finalName);
+                count++;
+            }
+        });
+    }
+
+    function addName(txt) {
+        let div = document.createElement('div');
+        div.className = 'name-row';
+        div.innerHTML = `<span class="name-text">${txt}</span> <button class="copy-btn" onclick="copyIt('${txt}')">COPY</button>`;
+        document.getElementById('output').appendChild(div);
+    }
+
+    function copyIt(t) {
+        navigator.clipboard.writeText(t);
+        alert("Copied!");
+    }
+</script>
+
+</body>
+</html>
